@@ -1,41 +1,45 @@
-﻿
-
-
-using FinanceBot;
+﻿using Discord;
+using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
 
-class Program {
 
 
-    static void Main(string[] args) {
+namespace FinanceBot {
 
-        Console.WriteLine("*******************************************************");
-
-        Console.WriteLine("SYNCHRONOUS");
-
-        AssyncTasks.Print_One();
-        AssyncTasks.Print_Two();
+    public class Program {
 
 
-        Console.WriteLine("*******************************************************");
-        Console.WriteLine("ASSYNCHRONOUS");
+        private static DiscordSocketClient _client;
 
-        Task task1 = Task.Run(() => AssyncTasks.Print_One());
-        Task task2 = Task.Run(() => AssyncTasks.Print_Two());
+        public static async Task Main() {
 
-        Task.WaitAll(task1, task2);
+            Console.WriteLine("START");
 
-
-        Console.WriteLine("*******************************************************");
+            _client = new DiscordSocketClient();
+            _client.Log += Log;
 
 
+            var token = "FIRST_LAUNCH";
+
+            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.StartAsync();
+
+
+            await Task.Delay(-1);
+        }
+
+        private static Task Log(LogMessage msg) {
+
+            Console.WriteLine(msg.ToString());
+            return Task.CompletedTask;
+
+        }
 
     }
 
 
-    
 
 
 }
